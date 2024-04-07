@@ -127,6 +127,16 @@ class _HomeState extends State<Home> {
 
   // adding new task
   void addToDoItem(String todo) {
+    if (todo.isEmpty) {
+      // Show an error message or snackbar indicating that the task cannot be empty
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Task cannot be empty'),
+          backgroundColor: warningColor,
+        ),
+      );
+      return;
+    }
     setState(() {
       todoList.add(Todo(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -134,7 +144,15 @@ class _HomeState extends State<Home> {
       ));
     });
     _todoController.clear();
+    // Show a snackbar after adding the task
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Task added successfully!'),
+        backgroundColor: Colors.green,
+      ),
+    );
   }
+
 
   AppBar buildAppBar() {
     return AppBar(
@@ -161,7 +179,7 @@ class _HomeState extends State<Home> {
     } else {
       results = todoList
           .where((item) =>
-              item.name!.toLowerCase().contains(enteredKeyword.toLowerCase()))
+              item.name.toLowerCase().contains(enteredKeyword.toLowerCase()))
           .toList();
     }
 
